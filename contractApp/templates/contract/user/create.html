@@ -1,0 +1,46 @@
+{% extends 'contract/base.html' %}
+
+{% block content %}
+<div class="container">
+    <div class="row" style="margin-top: 40px;">
+        <div class="col-md-5 offset-md-3">
+            <h4>Создать пользователя/клиента</h4>
+            <form action="/contract/user" method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="">Выберите роль</label>
+                    <select name="role_id" id="" class="form-control">
+                        <option value="1">Бухгалтер</option>
+                        <option value="2">Клиент</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="">Выберите отдел</label>
+                    <select name="group" id="" class="form-control">
+                        <option value="1">Сектор 1</option>
+                        <option value="2">Сектор 2</option>
+                        <option value="3">Сектор 3</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="">Имя</label>
+                    <input type="text" class="form-control" name="name">
+                </div>
+                <div class="form-group">
+                    <label for="">Введиет email адресс</label>
+                    <input type="email" class="form-control" name="email">
+                </div>
+                <div class="form-group">
+                    <label for="">Введите пароль</label>
+                    <input type="password" class="form-control" name="password">
+                </div>
+                <div style="display: inline-flex;">
+                    <button type="submit" class="btn btn-primary" style="margin-right: 5px;">Создать</button>
+                    <a href="/contract/user" class="btn btn-primary">Назад</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

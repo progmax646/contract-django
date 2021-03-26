@@ -1,0 +1,19 @@
+{% extends 'contract/base.html '%}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-3 offset-4" style="margin-top: 25%;">
+            <h3>Войти в систему</h3>
+            <form action="" method="POST" style="margin-top: 15px;">
+                {% csrf_token %}
+                <input type="text" class="form-control"  name="username" style="margin-bottom: 10px;" placeholder="Login">
+                <input type="password" class="form-control" name="password" placeholder="Password" style="margin-bottom: 15px;">
+                <input type="checkbox" style="margin-right: 5px;" name="remember_me1"><span>Запомнить меня</span><br>
+                <button type="submit" class="btn btn-primary" style="margin-top: 15px;">Sign in</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

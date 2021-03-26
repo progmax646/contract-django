@@ -1,0 +1,39 @@
+{% extends 'contract/base.html '%}
+
+
+{% block content %}
+
+<div class="container" style="margin-top: 40px;">
+	<div class="row">
+		<div class="col-md-12">
+			<h4 style="margin-bottom: 50px;">Список клиентов Бухгалтерии {{group}}</h4>
+			<table class="table1">
+				<thead>
+					<tr>
+						<th>№</th>
+						<th>Наименование клиента</th>
+						<th>Отдел</th>
+						<th>Сервис</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for client in clients %}
+					<?php n=0; ?>
+					<tr>
+						<th> <?php echo 1; ?> </th>
+						<td>{{client.user.username}} - {{client.company_name}}</td>
+						<td>Бухгалтерия {{group}}</td>
+						<td>
+							<a href="/contract/get-user/{{client.user.id}}" class="btn btn-secondary">
+								<i class="fa fa-eye" aria-hidden="true"></i>
+							</a>
+						</td>
+					</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
+
+{% endblock %}

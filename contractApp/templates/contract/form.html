@@ -1,0 +1,36 @@
+<form class="" action="/contract/edit/{{contract.id}}" id="form_contract2{{contract.id}}" method="post">
+    {% csrf_token %}
+    <div class="form-group">
+        <label for="client">Контрагент:</label>
+        <input type="text" name="client" value="{{client}}" class="form-control">
+    </div>
+    <div class="form-group">
+        <label for="client">Директор:</label>
+        <input type="text" name="director" value="{{director}}" class="form-control">
+    </div>
+    <div class="form-group">
+        <label for="client">Юридический адрес контрагента:</label>
+        <input type="text" name="addres" value="{{addres}}" class="form-control">
+    </div>
+    <div class="form-group">
+        <label for="client">ИНН:</label><br>
+        <input type="text" name="client_inn" value="{{inn}}" class="form-control" id="clientinn{{contract.id}}">
+    </div>
+    <div class="form-group">
+        <label for="client">МФО:</label>
+        <input type="text" name="mfo" value="{{mfo}}" class="form-control">
+    </div>
+    <div class="form-group">
+        <label for="client">Расчетный счет:</label>
+        <input type="text" name="check" value="{{account}}" class="form-control">
+    </div>
+    <div class="form-group">
+        <label for="client">Адрес банка:</label>
+        <input type="text" name="addres_bank" value="" class="form-control">
+    </div>
+    <div class="form-group">
+        <label for="client">ОКЭД:</label>
+        <input type="text" name="oked" value="{{oked}}" class="form-control">
+    </div>
+    <button type="submit" name="button" class="btn btn-primary">Сохранить</button>
+</form>

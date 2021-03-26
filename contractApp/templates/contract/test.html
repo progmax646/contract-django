@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    {% load static %}
+</head>
+<body>
+<script src="{% static 'js/yt-capi-ws.js' %}"></script>
+<script>
+CAPIWS.callFunction({
+    plugin    :"pfx",
+    name      :"load_key",
+    arguments :[
+      //Диск
+      disk="../C",
+      //Путь (должна быть пустой или 'DSKEYS')
+      path='',
+      //Имя файла без расширения
+      name='DS3076027240002',
+      //Алиас ключа
+      alias='DS3076027240002.pfx'
+    ]
+  },
+  function(event, data){
+    console.log(data);
+  },
+  function(error){
+    window.alert(error);
+  }
+);
+</script>
+</body>
+</html>

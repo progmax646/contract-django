@@ -1,0 +1,138 @@
+{% extends 'contract/base.html' %}
+{% block content %}
+      <div class="container">
+        <div class="row">
+          <a href="/contract" class="btn btn-secondary" style="margin-top: 35px;">Назад</a>
+          <div class="col-md-12 col-xs-6">
+            <h4 style="margin-top: 50px; margin-bottom: 25px;">История</h4>
+            <table class="table table-striped table-hover">
+              <thead>
+                <tr>
+                  <th>№</th>
+                  <th>Наименование договора</th>
+                  <th>Дата/время</th>
+                  <th>Комментарий</th>
+                  <th>Статус</th>
+                  <th>Сервис</th>
+                </tr>
+              </thead>
+              <tbody>
+                  {% for contract in contracts %}
+                  {% if contract.status == 1 %}
+                    <tr style="background-color:#0ef34a26;" id="tr_1{{contract.id}}">
+                  {% else %}
+                    <tr id="tr_1{{contract.id}}">
+                  {% endif %}
+                    <th data-label='№'></th>
+                    <td data-label='Наименование договора'>Договор {{contract.contract_name}}</td>
+                    <td data-label='Дата/время'>{{contract.date}}</td>
+                    <td data-label='Комментарий'>
+                      {% if contract.comment  %}
+                      <span>{{contract.comment}}</span>
+                      {% else %}s
+                      <span>---</span>
+                      {% endif %}
+                    </td>
+                    <td data-label='Статус' id="status3{{contract.id}}">
+                      {% if contract.didox == 0 and contract.status == 0 %}
+                        <a href="/contract/status1/{{contract.id}}" class="btn btn-secondary">Didox</a>
+                      {% elif contract.didox == 1 and contract.status == 0 %}
+                        <span class="badge badge-info">Didox</span>
+                      {% elif contract.status == 1 %}
+                        <span class="badge badge-success">Завершен</span>
+                      {% elif contract.status == 2 %}
+                        <span class="badge badge-danger">Удален</span>
+                      {% endif %}
+                    </td>
+                    <td data-label='Сервис'>
+                      <div class="service-group" style="display: inline-flex; margin-bottom: 3px;">
+                        <a href="#" class="btn btn-secondary" data-toggle="modal" data-target="#exampleModal{{contract.id}}" style="margin-right: 5px;"> <i class="fa fa-pencil-square-o"></i> </a>
+                        <!-- Modal -->
+                          <div class="modal fade" id="exampleModal{{contract.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                              <div class="modal-content">
+                                <div class="modal-header">
+                                  <h5 class="modal-title" id="exampleModalLabel">Добавить изменения в Договор №</h5>
+                                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                  </button>
+                                </div>
+                                <div class="modal-body">
+                                  <form class="" action="/contract/edit/{{contract.id}}" method="post">
+                                    {% csrf_token %}
+                                    <div class="form-group">
+                                      <label for="client">Контрагент:</label>
+                                      <input type="text" name="client" value="" class="form-control">
+                                    </div>
+                                    <div class="form-group">
+                                      <label for="client">Директор:</label>
+                                      <input type="text" name="director" value="" class="form-control">
+                                    </div>
+                                    <div class="form-group">
+                                      <label for="client">Юридический адрес контрагента:</label>
+                                      <input type="text" name="addres" value="" class="form-control">
+                                    </div>
+                                    <div class="form-group">
+                                      <label for="client">ИНН:</label>
+                                      <input type="text" name="client_inn" value="" class="form-control">
+                                    </div>
+                                    <div class="form-group">
+                                      <label for="client">МФО:</label>
+                                      <input type="text" name="mfo" value="" class="form-control">
+                                    </div>
+                                    <div class="form-group">
+                                      <label for="client">Расчетный счет:</label>
+                                      <input type="text" name="check" value="" class="form-control">
+                                    </div>
+                                    <div class="form-group">
+                                      <label for="client">Адрес банка:</label>
+                                      <input type="text" name="addres_bank" value="" class="form-control">
+                                    </div>
+                                    <div class="form-group">
+                                      <label for="client">ОКЭД:</label>
+                                      <input type="text" name="oked" value="" class="form-control">
+                                    </div>
+                                    <button type="submit" name="button" class="btn btn-primary">Сохранить</button>
+                                  </form>
+                                </div>
+                                <!-- <div class="modal-footer">
+                                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                  <button type="button" class="btn btn-primary">Save changes</button>
+                                </div> -->
+                              </div>
+                            </div>
+                          </div>
+                        <a href="{{contract.path}}" class="btn btn-secondary" style="margin-right: 5px;"> <i class="fa fa-download"></i> </a>
+                        <a href="/contract/get-pdf/{{contract.id}}" class="btn btn-secondary" style="margin-right: 5px;"> <i class="fa fa-file-pdf-o"></i> </a>
+                      </div>
+                      <div class="service-group-2">
+                        <button type="button" class="btn btn-secondary" style="width: 41px;" onclick="delStatusSuccess({{contract.id}})"><i class="fa fa-trash"></i> </button>
+                        <button type="button" name="button" class="btn btn-secondary" style="width:41px;" onclick="getStatusSuccess({{contract.id}})"><i class="fa fa-check-square"></i></button>
+                      </div>
+                    </td>
+                  </tr>
+              {% endfor %}
+              </tbody>
+            </table>
+            <div class="pagination">
+              <span class="step-links">
+                  {% if page_obj.has_previous %}
+                      <a href="?page=1">&laquo; first</a>
+                      <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+                  {% endif %}
+
+                  <span class="current">
+                      Страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}.
+                  </span>
+
+                  {% if page_obj.has_next %}
+                      <a href="?page={{ page_obj.next_page_number }}">next</a>
+                      <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+                  {% endif %}
+              </span>
+          </div>
+          </div>
+        </div>
+      </div>
+
+{% endblock %}

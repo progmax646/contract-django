@@ -1,0 +1,174 @@
+{% extends 'contract/base.html' %}
+{% block content %}
+      <div class="container">
+        <div class="row">
+          <div class="col-md-9">
+            <h4 class="text-left" style="margin-top: 50px; ">Сформировать договор {{role.company_name}}</h4><br>
+          </div>
+          <div class="col-md-4">
+            <form class="" action="/contract/get-user/{{id}}" method="post">
+              {% csrf_token %}
+              <div class="form-group">
+                <label for="type">Укажите тип документа</label>
+                {{form.type}}
+                <input type="hidden" name="id" value="1">
+              </div>
+              <div class="form-group">
+                <label for="comment">Дата договора</label>
+                {{form.date}}
+              </div>
+              <div class="form-group">
+                <label for="comment">Напишите комментарий для договора</label>
+                {{form.comment}}
+              </div>
+              <button type="submit" name="button" class="btn btn-primary">Сформировать</button>
+              {% if role.title == 'client'%}
+              <a href="{% url 'logout' %}" class="btn btn-primary">Выйти</a>
+              {% else %}
+              <a href="/contract/all-clients/{{role.group}}" class="btn btn-primary">Назад</a>
+              {% endif %}
+            </form>
+          </div>
+          <div class="col-md-3 offset-md-5" style="margin-top: 33px;">
+            <form class="" action="/contract/search" method="post" style="display: inline-flex; margin-right: 0px;">
+              {% csrf_token %}
+              <input type="text" name="search" value="" placeholder="Номер договора" class="form-control" style="margin-right: 3px;">
+              <button type="submit" name="button" class="btn btn-primary">Поиск</button>
+            </form>
+          </div>
+          <div class="col-md-12 col-xs-6">
+            <h4 style="margin-top: 50px; margin-bottom: 25px;">История</h4>
+            <table class="table1">
+              <thead>
+                <tr>
+                  <th>№</th>
+                  <th>Наименование договора</th>
+                  <th>Дата/время</th>
+                  <th>Комментарий</th>
+                  <th>Статус</th>
+                  <th>Сервис</th>
+                </tr>
+              </thead>
+              <tbody>
+                  {% for contract in contracts %}
+                    <tr id="tr_1{{contract.id}}">
+                    <th data-label='№'></th>
+                    <td data-label='Наименование договора'>Договор {{contract.contract_name}}</td>
+                    <td data-label='Дата/время'>{{contract.date}}</td>
+                    <td data-label='Комментарий'>
+                      {% if contract.comment  %}
+                      <span>{{contract.comment}}</span>
+                      {% else %}s
+                      <span>---</span>
+                      {% endif %}
+                    </td>
+                    <td data-label='Статус' id="status3{{contract.id}}">
+                      {% if contract.didox == 0 and contract.status == 0 %}
+                        <a href="/contract/status1/{{contract.id}}" class="btn btn-secondary">Didox</a>
+                      {% elif contract.didox == 1 and contract.status == 0 %}
+                        <span class="badge badge-info">Didox</span>
+                      {% elif contract.status == 1 %}
+                        <span class="badge badge-success">Завершен</span>
+                      {% elif contract.status == 2 %}
+                        <span class="badge badge-danger">Удален</span>
+                      {% endif %}
+                    </td>
+                    <td data-label='Сервис'>
+                      <div class="service-group" style="display: inline-flex; margin-bottom: 3px;">
+                        <a href="#" class="btn btn-secondary" data-toggle="modal" data-target="#exampleModal{{contract.id}}" style="margin-right: 5px;"> <i class="fa fa-pencil-square-o"></i> </a>
+                        <!-- Modal -->
+                          <div class="modal fade" id="exampleModal{{contract.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                              <div class="modal-content">
+                                <div class="modal-header">
+                                  <h5 class="modal-title" id="exampleModalLabel">Добавить изменения в Договор № {{contract.contract_name}}</h5>
+                                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                  </button>
+                                </div>
+                                <div class="modal-body" id="form-modal{{contract.id}}">
+                                  <form class="" action="/contract/edit/{{contract.id}}" id="form_contract{{contract.id}}" method="post">
+                                    {% csrf_token %}
+                                    <div class="form-group">
+                                      <label for="client">Контрагент:</label>
+                                      <input type="text" name="client" value="" class="form-control">
+                                    </div>
+                                    <div class="form-group">
+                                      <label for="client">Директор:</label>
+                                      <input type="text" name="director" value="" class="form-control">
+                                    </div>
+                                    <div class="form-group">
+                                      <label for="client">Юридический адрес контрагента:</label>
+                                      <input type="text" name="addres" value="" class="form-control">
+                                    </div>
+                                    <div class="form-group">
+                                      <label for="client">ИНН:</label><br>
+                                        <input type="text" name="client_inn" value="" class="form-control" id="clientinn{{contract.id}}">
+                                        <div style="display:inline-flex; margin-top: 15px;">
+                                          <div id="capcha_t"></div>
+<!--                                          <img src="{{url}}" alt="">-->
+                                          <button type="button" class="btn btn-secondary" onclick="getStatuz({{contract.id}})" id="getBtn{{contract.id}}">Обновить</button>
+                                          <div id="btn_html{{contract.id}}"></div>
+                                        </div>
+
+                                    </div>
+                                    <div class="form-group">
+                                      <label for="client">МФО:</label>
+                                      <input type="text" name="mfo" value="" class="form-control">
+                                    </div>
+                                    <div class="form-group">
+                                      <label for="client">Расчетный счет:</label>
+                                      <input type="text" name="check" value="" class="form-control">
+                                    </div>
+                                    <div class="form-group">
+                                      <label for="client">Адрес банка:</label>
+                                      <input type="text" name="addres_bank" value="" class="form-control">
+                                    </div>
+                                    <div class="form-group">
+                                      <label for="client">ОКЭД:</label>
+                                      <input type="text" name="oked" value="" class="form-control">
+                                    </div>
+                                    <button type="submit" name="button" class="btn btn-primary">Сохранить</button>
+                                  </form>
+                                </div>
+                                <!-- <div class="modal-footer">
+                                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                  <button type="button" class="btn btn-primary">Save changes</button>
+                                </div> -->
+                              </div>
+                            </div>
+                          </div>
+                        <a href="/{{contract.path}}" class="btn btn-secondary" style="margin-right: 5px;"> <i class="fa fa-download"></i> </a>
+                        <a href="/contract/get-pdf/{{contract.id}}" class="btn btn-secondary" style="margin-right: 5px;"> <i class="fa fa-file-pdf-o"></i> </a>
+                      </div>
+                      <div class="service-group-2">
+                        <button type="button" class="btn btn-secondary" style="width: 41px;" onclick="delStatusSuccess({{contract.id}})"><i class="fa fa-trash"></i> </button>
+                        <button type="button" name="button" class="btn btn-secondary" style="width:41px;" onclick="getStatusSuccess({{contract.id}})"><i class="fa fa-check-square"></i></button>
+                      </div>
+                    </td>
+                  </tr>
+              {% endfor %}
+              </tbody>
+            </table>
+            <div class="pagination">
+              <span class="step-links">
+                  {% if page_obj.has_previous %}
+                      <a href="?page=1">&laquo; first</a>
+                      <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+                  {% endif %}
+
+                  <span class="current">
+                      Страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}.
+                  </span>
+
+                  {% if page_obj.has_next %}
+                      <a href="?page={{ page_obj.next_page_number }}">next</a>
+                      <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+                  {% endif %}
+              </span>
+          </div>
+          </div>
+        </div>
+      </div>
+
+{% endblock %}

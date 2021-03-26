@@ -1,0 +1,61 @@
+{% extends 'contract/base.html'%}
+
+{% block content %}
+<div class="container">
+    <div class="row" style="margin-top: 40px;">
+        <div class="col-md-12">
+            <h4>Система создания пользователей и клиентов</h4><br>
+        </div>
+        <div class="col-md-4">
+            <div id="block_item" style="display: inline-flex;">
+                <a href="/contract/user/create" class="btn btn-primary" style="margin-right: 5px;">Создать пользователя</a>
+                <a href="" class="btn btn-primary">Назад</a>
+            </div>
+        </div>
+    </div>
+    <div id="table_users" style="margin-top: 40px;">
+        <div class="row">
+            <h5>Пользователи:</h5>
+            <div class="col-md-12">
+                <table class="table1">
+                    <thead>
+                        <tr>
+                            <th>№</th>
+                            <th>Наименование</th>
+                            <th>Роль</th>
+                            <th>Отдел</th>
+                            <th>Сервис</th>
+                        </tr>
+                    </thead>
+                    <tbody style="text-align: left;">
+                        {% for user in users %}
+                        <tr>
+                            <th>{{user.id}}</th>
+                            <td>{{user.name}}</td>
+                            <td>
+                                {% if user.role_id == 1%}
+                                Клиент
+                                {% else %}
+                                Бухгалтер
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if user.group == 1 %}
+                                1 сектор
+                                {% elif user..group == 2 %}
+                                2 сектор
+                                {% else %}
+                                3 сектор
+                                {% endif %}
+                            </td>
+                            <td>---</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+</div>
+{% endblock  %}
