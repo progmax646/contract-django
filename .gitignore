@@ -4,3 +4,4 @@ local_settings.py
 prod_settings.py
 venv
 /media/*
+.idea/*
