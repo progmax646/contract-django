@@ -17,7 +17,7 @@ from . import didox
 
 # Create your views here.
 
-locale.setlocale(locale.LC_TIME, "ru.UTF-8")
+# locale.setlocale(locale.LC_TIME, "ru.UTF-8")
 
 
 def loginPage(request):
